@@ -48,7 +48,7 @@ int main(int argc, const char *argv[]) {
     
     //Opening log file
     FILE *LogFile;
-    LogFile=fopen("/Users/abel/Programes/Montecarlo/Montecarlo/test.txt", "w");
+    LogFile=fopen("/Users/abel/Programes/Montecarlo/Montecarlo/test.log", "w");
     
 //////////////// Call Monte Carlo Function //////////////////////
     results Res = MonteCarlo(FakePotential, InitialConditions, LogFile);
