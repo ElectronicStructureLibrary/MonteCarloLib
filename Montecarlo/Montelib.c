@@ -1,6 +1,6 @@
 //
 //  Montelib.c
-//  Montecarlo function
+//  Copyright (C) 2015 Abel Carreras
 //
 
 #include "Montelib.h"

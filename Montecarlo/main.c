@@ -1,6 +1,6 @@
 //
 //  main.c
-//  Main Program
+//  Copyright (C) 2015 Abel Carreras
 //
 
 #include <stdio.h>
