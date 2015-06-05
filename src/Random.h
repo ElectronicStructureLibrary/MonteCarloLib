@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <stdint.h>
 
 void random_seed();
 double RandomRange(double inf , double sup);

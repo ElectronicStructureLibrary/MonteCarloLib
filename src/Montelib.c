@@ -4,7 +4,6 @@
 //
 
 #include "Montelib.h"
-// Montecarlo library
 
 results MonteCarlo(double(*PotentialFunction)(double *Coordinates),
                    double*(*AlterationFunction)(double *Coordinates, conditions),

@@ -19,8 +19,8 @@ double HarmonicPotential2D(double* coordinates) {
 }
 
 double Sinusoidal3D(double* coordinates) {
-    double Lenght= 5;
-    double Hight = 10;
+    double Lenght= 1;
+    double Hight = 20;
     
     double Energy = 0.0;
     for (int i =0; i < 3; i++) {
