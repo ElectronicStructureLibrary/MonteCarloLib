@@ -1,10 +1,8 @@
 //
-//  main.c
+//  example1.c
+//  MonteCarloLib
 //  Copyright (C) 2015 Abel Carreras
 //
-//  This is a simple piece of code to show how the MonteCarlo library is
-//  called from a main program
-
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -20,24 +18,24 @@
 
 // main code
 int main(int argc, const char *argv[]) {
-
     
-///////////////////////// Initial conditions ////////////////////////
+    
+    ///////////////////////// Initial conditions ////////////////////////
     int dimensions = 2;
     
     random_seed();
     //Initial coodinates (Random)
     double *coordinates = malloc(dimensions * sizeof(double));
     for (int i =0; i<dimensions; i++) {
-        coordinates[i] = RandomRange(0,10);
+        coordinates[i] = RandomRange(-0.1, 0.1) ;
     }
-   
+    
     //Opening log file
     FILE *LogFile, *Energyfile, *CoordinateFile;
     LogFile=fopen("/Users/abel/Programes/MonteCarloLib/example/test.log", "w");
     CoordinateFile=fopen("/Users/abel/Programes/MonteCarloLib/example/coordinates.out", "w");
     Energyfile=fopen("/Users/abel/Programes/MonteCarloLib/example/energy.out", "w");
-
+    
     
     conditions InitialConditions;
     InitialConditions.coordinates = coordinates;
@@ -59,19 +57,17 @@ int main(int argc, const char *argv[]) {
         printf (" %f",InitialConditions.coordinates[i]);
     }
     printf ("\n");
-
-    
-//   printf("Initial energy: %f\n",LennarJonnes2D(InitialConditions.coordinates));
-     printf("Initial energy: %f\n",HarmonicPotential2D(InitialConditions.coordinates));
-
-//////////////// Call Monte Carlo Function //////////////////////
     
     
-//    results Res = MonteCarlo(LennarJonnes2D, AlterationBox2D, InitialConditions, LogFile);
-      results Res = MonteCarlo(HarmonicPotential2D, AlterationFree, InitialConditions, LogFile);
-
+    printf("Initial energy: %f\n",HarmonicPotential2D(InitialConditions.coordinates));
     
-///////////////////// Print final results ///////////////////////
+    //////////////// Call Monte Carlo Function //////////////////////
+    
+    
+    results Res = MonteCarlo(HarmonicPotential2D, AlterationFree, InitialConditions, LogFile);
+    
+    
+    ///////////////////// Print final results ///////////////////////
     
     fclose(CoordinateFile);
     fclose(Energyfile);
@@ -88,9 +84,7 @@ int main(int argc, const char *argv[]) {
     
     printf("Final specific heat (Cv): %f\n",Res.Cv);
     printf ("\n");
-
+    
     
     return 0;
 }
-
-

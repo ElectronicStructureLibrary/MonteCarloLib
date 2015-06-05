@@ -66,7 +66,6 @@ results MonteCarlo(double(*PotentialFunction)(double *Coordinates),
         if (Energy < NewEnergy) {
             Ratio = exp((Energy - NewEnergy)/(Params.temperature * Params.kb));
             RandomNumber = RandomRange(0,1);
-        //    RandomNumber = ((double)ran3(idum)/((double)RAND_MAX));
 
             if (Ratio < RandomNumber){
                 free(NewCoordinates);

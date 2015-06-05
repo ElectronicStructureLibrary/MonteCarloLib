@@ -18,12 +18,11 @@ void random_seed() {
 
 // Algorithm 1  (Standard c random algorithm)
 float ran1(){
-    return (float)rand();
+    return (float)((double)rand()/((double)RAND_MAX));
 }
-
 
 
 // Random functions wrapper (Change function calling here to use other random funtion)
 double RandomRange(double inf , double sup){
-    return ran1()*(sup-inf)+inf;
+    return (double)ran1()*(sup-inf)+inf;
 }

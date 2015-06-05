@@ -9,19 +9,22 @@
 
 
 double HarmonicPotential2D(double* coordinates) {
+    double k = 1;
+    
     double Energy = 0.0;
     for (int i =0; i < 2; i++) {
-        Energy += pow(coordinates[i],2);
+        Energy += k * pow(coordinates[i],2);
     }
     return Energy;
 }
 
 double Sinusoidal3D(double* coordinates) {
     double Lenght= 5;
+    double Hight = 10;
     
     double Energy = 0.0;
     for (int i =0; i < 3; i++) {
-        Energy += sin(coordinates[i]/Lenght);
+        Energy += Hight*sin(coordinates[i]/Lenght);
     }
     return Energy;
 }
