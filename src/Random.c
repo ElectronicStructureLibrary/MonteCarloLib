@@ -23,7 +23,7 @@ float ran1(){
     return (float)((double)rand()/((double)RAND_MAX));
 }
 
-// Algorithm 2
+// Algorithm 2  (Very simple just for illustrating)
 float ran2()
 {
     long lim = 1234567898;
@@ -32,7 +32,7 @@ float ran2()
     return (float)((a % lim) + 1)/(float)lim;
 }
 
-// Algorithm 3
+// Algorithm 3 (Very simple just for illustrating)
 float ran3()
 {
     long lim = 1234567898;
