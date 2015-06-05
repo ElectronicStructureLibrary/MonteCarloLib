@@ -13,9 +13,6 @@ results MonteCarlo(double(*PotentialFunction)(double *Coordinates),
     //Random initaialization
     random_seed();
     
-    //Choosing Alteration function
-//    double*(*AlterationFunction)(double *Coordinates, conditions) = AlterationBox2D;
-    
     //Initializing Random function
     double RandomNumber;
     
@@ -31,7 +28,9 @@ results MonteCarlo(double(*PotentialFunction)(double *Coordinates),
     double Energy = (*PotentialFunction)(Coordinates);
 
     
-    fprintf(LogFile,"Start Montecarlo loop\n");
+    fprintf(LogFile,"Starting Monte Carlo\n");
+    fprintf(LogFile,"Temperature: %f\n", Params.temperature);
+    fprintf(LogFile,"Number of cycles: %d\n", Params.numberofcycles);
 
     for (int i = 0; i<Params.numberofcycles ; i++) {
 
@@ -83,7 +82,9 @@ results MonteCarlo(double(*PotentialFunction)(double *Coordinates),
     results Final = {Params.coordinates, Energy, Acceptation};
     Final.coordinates = Coordinates;
     Final.Cv = Cv;
-    
+ 
+    fprintf(LogFile,"Monte Carlo finished\n");
+
     return Final;
 }
 

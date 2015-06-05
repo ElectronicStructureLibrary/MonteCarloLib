@@ -3,6 +3,13 @@
 //  MonteCarloLib
 //  Copyright (C) 2015 Abel Carreras
 //
+//   This is an example to how to run the MonteLib library for a simple case
+//   This example runs a MC simulation of three independent rotors rotating along
+//   a hindered axis simulated by a sinusoidal potential. 
+//
+//   Potential : 3D Sinusoidal
+//   Alteration: One rotor each time alteration
+
 
 #include <stdio.h>
 #include <stdlib.h>

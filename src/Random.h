@@ -18,5 +18,6 @@ double RandomRange(double inf , double sup);
 float ran1();
 float ran2();
 float ran3();
+float ran4();
 
 #endif

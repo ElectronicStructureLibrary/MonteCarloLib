@@ -3,6 +3,13 @@
 //  MonteCarloLib
 //  Copyright (C) 2015 Abel Carreras
 //
+//   This is an example to how to run the MonteLib library for a simple case
+//   This example runs a MC simulation of one particle subject to a 2D harmonic
+//   potential.
+//
+//   Potential : 2D HArmonic
+//   Alteration: Free random alteration
+
 
 #include <stdio.h>
 #include <stdlib.h>

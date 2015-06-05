@@ -19,26 +19,36 @@ void random_seed() {
 
 
 // Algorithm 1  (Standard c random algorithm)
-float ran1(){
-    return (float)((double)rand()/((double)RAND_MAX));
+double ran1(){
+    return (double)((double)rand()/((double)RAND_MAX));
 }
 
 // Algorithm 2  (Very simple just for illustrating)
-float ran2()
+double ran2()
 {
     long lim = 1234567898;
-    static long a = 1;
+    static long a = (long)&random_seed_montecarlo;
     a = (a * 32719 + 3) % 32749;
-    return (float)((a % lim) + 1)/(float)lim;
+    return (double)((a % lim) + 1)/(double)lim;
 }
 
 // Algorithm 3 (Very simple just for illustrating)
-float ran3()
+double ran3()
 {
     long lim = 1234567898;
-    static long a = 100001;
+    static long a = (long)&random_seed_montecarlo;
     a = (a * 125) % 2796203;
-    return ((float)(a % lim) + 1)/(float)lim;
+    return ((double)(a % lim) + 1)/(double)lim;
+}
+
+// Algorithm 4 (Very simple just for illustrating)
+double ran4()
+{
+    long lim = 1234567898;
+    static long a = (long)&random_seed_montecarlo;
+    a = (((a * 214013L + 2531011L) >> 16) & 32767);
+    
+    return (double)((a % lim) + 1)/(double)lim;
 }
 
 

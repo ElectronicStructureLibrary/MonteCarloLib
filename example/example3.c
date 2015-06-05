@@ -1,9 +1,14 @@
 //
-//  main.c
+//  example3.c
+//  MonteCarloLib
 //  Copyright (C) 2015 Abel Carreras
 //
-//  This is a simple piece of code to show how the MonteCarlo library is
-//  called from a main program
+//   This is an example to how to run the MonteLib library for a simple case
+//   This example runs a MC simulation of 10 particles in a 2D periodical box
+//   of 10x10 subjected to a Lennard Jones interaction (cutoff: 10).
+//
+//   Potential : Lennad Jones 2D
+//   Alteration: Periodical Box 2D
 
 
 #include <stdio.h>
