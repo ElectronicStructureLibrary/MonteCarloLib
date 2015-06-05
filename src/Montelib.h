@@ -10,8 +10,11 @@
 #include <math.h>
 #include <stdlib.h>
 #include <time.h>
+#include "Random.h"
 
-#define SIZEAVERAGE 200
+// Define Size vectors used to do average
+#define SIZEAVERAGE 1000
+
 
 // Define conditions structure
 typedef struct {
@@ -24,6 +27,8 @@ typedef struct {
     int averagevalues;
     int takesample;
     double regulator;
+    FILE* coordinatesfile;
+    FILE* energyfile;
 }conditions;
 
 
@@ -36,19 +41,20 @@ typedef struct {
 }results;
 
 
-//Function declaration
-results MonteCarlo(double(*PotentialFunction)(double *Coordinates), conditions Conditions, FILE *LogFile);
+//Main MC function
+results MonteCarlo(double(*PotentialFunction)(double *Coordinates),
+                   double*(*AlterationFunction)(double *Coordinates, conditions),
+                   conditions Params,
+                   FILE*LogFile);
 
+//Acceptation functions
 double AcceptationAverage(int item);
-double Random(double inf , double sup);
 double RegulatorAcceptation(double acceptation, conditions Conditions);
 
 
 //Properties functions
 double Fluctuation(double Energy);
 
-// Alteration functions definitions
-double* Alteration1(double*, conditions);
-double* Alteration2(double*, conditions);
+
 
 #endif /* defined(__Montecarlo__Montelib__) */

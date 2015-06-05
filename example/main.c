@@ -2,40 +2,55 @@
 //  main.c
 //  Copyright (C) 2015 Abel Carreras
 //
+//  This is a simple piece of code to show how the MonteCarlo library is
+//  called from a main program
+
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <time.h>
+
+// Load library header files
 #include "Montelib.h"
-
-
-// Potential Functions declarations
-double FakePotential(double* coordinates);
-double FakePotential2(double* coordinates);
+#include "Random.h"
+#include "Alteration.h"
+#include "Potential.h"
 
 
 // main code
 int main(int argc, const char *argv[]) {
-    
+
     
 ///////////////////////// Initial conditions ////////////////////////
     int dimensions = 2;
-    double *coordinates = malloc(dimensions * sizeof(double));
     
-    //Initial coodinates
+    random_seed();
+    //Initial coodinates (Random)
+    double *coordinates = malloc(dimensions * sizeof(double));
     for (int i =0; i<dimensions; i++) {
-        coordinates[i] = 5.7;
+        coordinates[i] = RandomRange(0,10);
     }
+   
+    //Opening log file
+    FILE *LogFile, *Energyfile, *CoordinateFile;
+    LogFile=fopen("/Users/abel/Programes/MonteCarloLib/example/test.log", "w");
+    CoordinateFile=fopen("/Users/abel/Programes/MonteCarloLib/example/coordinates.out", "w");
+    Energyfile=fopen("/Users/abel/Programes/MonteCarloLib/example/energy.out", "w");
+
     
     conditions InitialConditions;
     InitialConditions.coordinates = coordinates;
     InitialConditions.dimensions = dimensions;
     InitialConditions.factor = 0.1;
-    InitialConditions.numberofcycles = 500000;
+    InitialConditions.numberofcycles = 1000000;
     InitialConditions.kb = 0.0019872041; // kcal/(mol·K)
-    InitialConditions.temperature = 100; // K
-    InitialConditions.takesample = 20;
+    InitialConditions.temperature = 1000; // K
+    InitialConditions.takesample = 50;
     InitialConditions.regulator = 0.001;
+    
+    InitialConditions.coordinatesfile = CoordinateFile;
+    InitialConditions.energyfile = Energyfile;
     
     
     //Print initial coodinates
@@ -46,15 +61,23 @@ int main(int argc, const char *argv[]) {
     printf ("\n");
 
     
-    //Opening log file
-    FILE *LogFile;
-    LogFile=fopen("/Users/abel/Programes/Montecarlo/Montecarlo/test.log", "w");
-    
+//   printf("Initial energy: %f\n",LennarJonnes2D(InitialConditions.coordinates));
+     printf("Initial energy: %f\n",HarmonicPotential2D(InitialConditions.coordinates));
+
 //////////////// Call Monte Carlo Function //////////////////////
-    results Res = MonteCarlo(FakePotential, InitialConditions, LogFile);
     
+    
+//    results Res = MonteCarlo(LennarJonnes2D, AlterationBox2D, InitialConditions, LogFile);
+      results Res = MonteCarlo(HarmonicPotential2D, AlterationFree, InitialConditions, LogFile);
+
     
 ///////////////////// Print final results ///////////////////////
+    
+    fclose(CoordinateFile);
+    fclose(Energyfile);
+    fclose(LogFile);
+    
+    
     printf("Final energy %f\n",Res.energy);
     
     printf ("Final coordinates:");
@@ -63,49 +86,11 @@ int main(int argc, const char *argv[]) {
     }
     printf ("\n");
     
-    printf("Specific heat (Cv): %f\n",Res.Cv);
+    printf("Final specific heat (Cv): %f\n",Res.Cv);
     printf ("\n");
 
-    
-//////////////////////// Testing the potential in a file  ////////////////////
-    FILE *fpot;
-    fpot=fopen("/Users/abel/Programes/Montecarlo/Montecarlo/potenctial", "w");
-    double x, y, Energy;
-    for (int i =0; i< 100; i++) {
-        for (int j =0; j< 100; j++) {
-            x = i * 0.1 -5;
-            y = j * 0.1 -5;
-            coordinates[0] = x;
-            coordinates[1] = y;
-            Energy = FakePotential(coordinates);
-            fprintf(fpot, "%20.10f %20.10f %20.10f\n", coordinates[0], coordinates[1], Energy);
-        }
-        fprintf(fpot, "\n");
-    }
-    printf ("\n");
-    
-    fclose(fpot);
-//////////////////////////////////////////////////////////////////////////////
     
     return 0;
 }
 
-
-/////////////////////// Potential functions definitions ////////////////////////
-
-double FakePotential(double* coordinates) {
-    double total = 0.0;
-    for (int i =0; i < 2; i++) {
-        total += pow(coordinates[i],2);
-    }
-    return total;
-}
-
-double FakePotential2(double* coordinates) {
-    double total = 0.0;
-    for (int i =0; i < 3; i++) {
-        total += pow(coordinates[i],2);
-    }
-    return total;
-}
 

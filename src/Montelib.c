@@ -7,18 +7,19 @@
 // Montecarlo library
 
 results MonteCarlo(double(*PotentialFunction)(double *Coordinates),
-                   conditions Conditions,
+                   double*(*AlterationFunction)(double *Coordinates, conditions),
+                   conditions Params,
                    FILE *LogFile) {
     
-
+    //Random initaialization
+    random_seed();
+    
     //Choosing Alteration function
-    double*(*AlterationFunction)(double *Coordinates, conditions) = Alteration1;
+//    double*(*AlterationFunction)(double *Coordinates, conditions) = AlterationBox2D;
     
     //Initializing Random function
     double RandomNumber;
-    time_t t;
-    srand((unsigned) time(&t));
-
+    
     //Declarating & initaializating
     double* NewCoordinates;
     double NewEnergy;
@@ -27,37 +28,45 @@ results MonteCarlo(double(*PotentialFunction)(double *Coordinates),
     //Initial conditions
     double Acceptation = 0;
     double Cv = 0;
-    double* Coordinates = Conditions.coordinates;
+    double* Coordinates = Params.coordinates;
     double Energy = (*PotentialFunction)(Coordinates);
 
     
-    printf("Start Montecarlo loop\n");
+    fprintf(LogFile,"Start Montecarlo loop\n");
 
-    for (int i = 0; i<Conditions.numberofcycles ; i++) {
+    for (int i = 0; i<Params.numberofcycles ; i++) {
 
-        if (i % Conditions.takesample == 0) {
+        if (i % Params.takesample == 0) {
             // Statistical information
-            Cv = Fluctuation(Energy)/(Conditions.kb*pow(Conditions.temperature,2));
+            Cv = Fluctuation(Energy)/(Params.kb*pow(Params.temperature,2));
 
-            //Write in log file
-            fprintf(LogFile, "%20.10f %20.10f %20.10f %20.10f", Energy, Acceptation, Cv, Conditions.factor);
-            for (int i =0; i< Conditions.dimensions; i++) {
-                fprintf(LogFile, " %20.10f",Coordinates[i]);
+            // Write to file (if exist)
+
+            if (Params.coordinatesfile != NULL) {
+                for (int i =0; i< Params.dimensions; i++) {
+                    fprintf(Params.coordinatesfile, " %20.10f",Coordinates[i]);
+                }
+                fprintf(Params.coordinatesfile, "\n");
             }
-            fprintf(LogFile,"\n");
+            
+            if (Params.energyfile != NULL) {
+                fprintf(Params.energyfile, "%20.10f %20.10f %20.10f %20.10f\n", Energy, Acceptation, Cv, Params.factor);
+            }
         }
         
+        
         // Acceptation Regulator
-        Conditions.factor = RegulatorAcceptation(Acceptation, Conditions);
+        Params.factor = RegulatorAcceptation(Acceptation, Params);
     
   
         // Metropolis algorithm
-        NewCoordinates = (*AlterationFunction)(Coordinates, Conditions);
+        NewCoordinates = (*AlterationFunction)(Coordinates, Params);
         NewEnergy = (*PotentialFunction)(NewCoordinates);
 
         if (Energy < NewEnergy) {
-            Ratio = exp((Energy - NewEnergy)/(Conditions.temperature * Conditions.kb));
-            RandomNumber = Random(0,1);
+            Ratio = exp((Energy - NewEnergy)/(Params.temperature * Params.kb));
+            RandomNumber = RandomRange(0,1);
+        //    RandomNumber = ((double)ran3(idum)/((double)RAND_MAX));
 
             if (Ratio < RandomNumber){
                 free(NewCoordinates);
@@ -73,7 +82,7 @@ results MonteCarlo(double(*PotentialFunction)(double *Coordinates),
     }
     
     // Setting final results
-    results Final = {Conditions.coordinates, Energy, Acceptation};
+    results Final = {Params.coordinates, Energy, Acceptation};
     Final.coordinates = Coordinates;
     Final.Cv = Cv;
     
@@ -139,36 +148,4 @@ double Fluctuation(double Energy) {
     Sum2+=pow(EnergyVector[rear],2);
 
     return (((double)Sum2/Denominator) - pow((double)Sum/SIZEAVERAGE,2));
-}
-
-
-double Random(double inf , double sup){
-    return ((double)rand()/((double)RAND_MAX))*(sup-inf)+inf ;
-}
-
-
-//////////////////////////////// Alteration functions //////////////////////////////
-
-double* Alteration1(double* Coordinates, conditions params) {
-    
-    double RandomNumber;
-    double *NewCoordinates = malloc(params.dimensions * sizeof(double));
-
-    for (int i = 0; i < params.dimensions; i++){
-        RandomNumber = Random(-1, 1);
-        NewCoordinates[i] =  Coordinates[i] + (params.factor * RandomNumber);
-    }
-    return NewCoordinates;
-}
-
-double* Alteration2(double* Coordinates, conditions params) {
-    
-    double RandomNumber;
-    double *NewCoordinates = malloc(params.dimensions * sizeof(double));
-    
-    for (int i = 0; i < params.dimensions; i++){
-        RandomNumber = Random(-1, 1);
-        NewCoordinates[i] =  Coordinates[i] + (params.factor * RandomNumber);
-    }
-    return NewCoordinates;
 }
