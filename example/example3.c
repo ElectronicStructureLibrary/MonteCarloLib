@@ -27,7 +27,7 @@
 int main(int argc, const char *argv[]) {
 
     
-///////////////////////// Initial conditions ////////////////////////
+    ///////////////////////// Initial conditions ////////////////////////
     int dimensions = 20;
     
     random_seed();
@@ -67,16 +67,14 @@ int main(int argc, const char *argv[]) {
 
     
     printf("Initial energy: %f\n",LennarJonnes2D(InitialConditions.coordinates));
-//     printf("Initial energy: %f\n",HarmonicPotential2D(InitialConditions.coordinates));
 
-//////////////// Call Monte Carlo Function //////////////////////
+    //////////////// Call Monte Carlo Function //////////////////////
     
     
     results Res = MonteCarlo(LennarJonnes2D, AlterationBox2D, InitialConditions, LogFile);
-  //    results Res = MonteCarlo(HarmonicPotential2D, AlterationFree, InitialConditions, LogFile);
 
     
-///////////////////// Print final results ///////////////////////
+    ///////////////////// Print final results ///////////////////////
     
     fclose(CoordinateFile);
     fclose(Energyfile);

@@ -30,8 +30,6 @@ int main(int argc, const char *argv[]) {
     int dimensions = 2;
     
     random_seed();
-
-    
     //Initial coodinates (Random)
     double *coordinates = malloc(dimensions * sizeof(double));
     for (int i =0; i<dimensions; i++) {
